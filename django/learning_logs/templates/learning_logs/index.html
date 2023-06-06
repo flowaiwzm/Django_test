@@ -1,0 +1,99 @@
+{% extends "learning_logs/base.html" %}
+{% load static %}
+{% block page_header %}
+{% if user.is_authenticated %}
+<div class="text-center">
+  <h1 style="align-content: center;">为啥要进行主题学习</h1>
+</div>
+<div class="container text-center">
+  <div class="row">
+    <div  class="col" class="card">
+      <img src="{% static 'learning_logs/logo.png' %}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">深入学习</h5>
+        <p class="card-text">主题学习可以让你更深入地学习某个领域或主题，掌握更多的知识和技能。</p>
+        <a href="{% url 'learning_logs:topics' %}" class="btn btn-primary">学习主题</a>
+      </div>
+    </div>
+    <div  class="col" class="card">
+      <img src="{% static 'learning_logs/logo.png' %}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">提高效率</h5>
+        <p class="card-text">通过主题学习，你可以更有针对性地学习，并且可以更快地掌握相关知识和技能</p>
+        <a href="{% url 'learning_logs:topics' %}" class="btn btn-primary">学习主题</a>
+      </div>
+    </div>
+    <div  class="col" class="card">
+      <img src="{% static 'learning_logs/logo.png' %}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">增强记忆</h5>
+        <p class="card-text">主题学习可以让你更容易地记住所学的知识</p>
+        <a href="{% url 'learning_logs:topics' %}" class="btn btn-primary">学习主题</a>
+      </div>
+    </div>
+</div>
+</div>
+
+  <h1>今天随机推荐的水果是：{% for fruit in fruits %} {{fruit}} {% endfor %}</h1>
+  <div class="text-center">
+    <h2>   <a href="{% url 'learning_logs:upload' %}">文件上传</a>    </h2>
+  </div>
+  <div class="text-center">
+    <h2>GitHub个人用户信息调用</h2>
+  </div>
+
+<div class="container text-center">
+  <div class="row">
+    <div class="col">
+      <p>用户名：{{res1.login}}</p>
+    </div>
+    <div class="col ">
+      <img src="{{res1.avatar_url }}" alt="头像" class="img-fluid rounded">
+    </div>
+    <div class="col">
+      <a href="{{ res1.html_url }}">Github主页</a>
+    </div>
+  </div>
+</div>
+<div class="container text-center">
+  <div class="row">
+    <div  class="col" class="card">
+      <img src="{% static 'learning_logs/alien.png' %}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h2 class="card-title">外星人小游戏</h2>
+        <p class="card-text">主题学习可以让你更深入地学习某个领域或主题，掌握更多的知识和技能。</p>
+        <a href="{% url 'aliens_game:alien_invasion' %}" class="btn btn-primary">点击前往</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <h1>{{res2}}</h1> -->
+<!-- <img src="data:image/png;base64,{{ res2 }}"> -->
+<!-- <h2>{{res3}}</h2> -->
+<div class="view" style="text-align: center;">
+  <button><a href="{% url 'learning_logs:data' %}"><h2>前往数据可视化页面</h2></a></button>
+</div>
+<div class="weather" style="text-align: center;">
+  <h2>查询城市的天气情况</h2>
+  <form method="get" action="{% url 'learning_logs:weather' %}">
+      <input type="text" name="city" placeholder="Enter city name" >
+      <button type="submit" class="btn btn-primary mb-3">查询</button>
+  </form>
+</div>
+
+{% else %}
+  <div class='jumbotron'>
+      <h1 class="display-3">跟踪自己的学习</h1>
+    <h2>
+    <button><a href="{% url 'users:register' %}">Register an account</a></button> to make
+     your own Learning Log, and list the topics you're learning about.
+    </h2>
+    <h2>
+    Whenever you learn something new about a topic, make an entry 
+    summarizing what you've learned.
+     </h2>
+  </div>
+{% endif %}
+{% endblock page_header %}
+
+  

@@ -1,0 +1,98 @@
+import pygame
+from ship import Ship
+from settings import Settings
+from pygame.sprite import Group
+import game_functions as gf
+from game_stats import GameStats
+from button import Button
+from scoreboard import Scoreboard
+from explosion import Explosion
+import os
+import cv2
+import time
+import sys
+def run_game():
+    #初始化pygame、设置和屏幕对象
+    pygame.init()
+    # 初始化摄像头
+    cap = cv2.VideoCapture(0)
+    # 设置摄像头捕获的帧大小
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 200)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 200)
+    clock = pygame.time.Clock()
+    camera_fps = 20
+    cap.set(cv2.CAP_PROP_FPS, camera_fps)
+    # 获取当前程序的工作目录
+    base_folder = os.path.dirname(__file__)
+    # 加载背景音乐文件
+    pygame.mixer.music.load(os.path.join(base_folder, "audio/bgm.mp3"))
+    # 循环播放背景音乐
+    pygame.mixer.music.play(-1)
+    # 初始化Settings对象
+    ai_settings = Settings()
+    screen = pygame.display.set_mode((ai_settings.screen_width,ai_settings.screen_height))
+    
+    pygame.display.set_caption("外星人入侵小游戏")
+    #创建Play按钮
+    play_botton = Button(ai_settings, screen, "Play")
+    #创造一艘飞船
+    ship = Ship(ai_settings,screen)
+    #创建一个用于存储子弹的编组
+    bullets = Group()
+    # all_sprites = pygame.sprite.Group()
+    explosions = Group()
+    # self.button_types="nomal"
+    #创建一个用于存储外星人的编组
+    aliens = Group()
+    #创建一个用于存储游戏统计信息的实例，并创建记分牌
+    stats = GameStats(ai_settings)
+    sb = Scoreboard(ai_settings, screen, stats)
+    #创建外星人人群
+    gf.create_fleet(ai_settings, screen, ship, aliens)
+
+    #开始游戏主循环
+    while True:
+        dt = clock.tick(60) / 1000.0
+    #     ret, frame = cap.read()
+    #     m = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    #     m = cv2.transpose(m)
+    #     m = pygame.surfarray.make_surface(m)
+    #     screen.blit(m, (1050, 200))
+    #     pygame.display.flip() 
+
+    #     # 刷新Pygame窗口
+    #     pygame.display.update()
+
+    #     clock.tick(camera_fps)
+    # # 调用手势识别函数
+    #     gesture =gf.recognize_gesture(frame)   
+    # # 在图像上显示识别结果
+    #     if gesture is not None:
+    #         # text=cv2.putText(frame, gesture, (10,10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+    #         # screen.blit(m,(20,20))
+    #         print(gesture)
+    #         if gesture=="paper":
+    #             gf.fire_bullet(ai_settings, screen, ship, bullets, ship.bullet_type)
+    #         elif gesture=='rock':
+    #             ship.moving_right = True
+    #         elif gesture=='scissors':
+    #             ship.moving_left = True
+    #         else :
+    #                 ship.center_ship()
+    
+    # # 按下q键退出循环
+    #     if cv2.waitKey(1) & 0xFF == ord('q') == pygame.QUIT:
+    #         # 关闭窗口和摄像头
+    #         # pygame.display.update()
+    #         cap.release()
+    #         cv2.destroyAllWindows()
+    #         pygame.quit()
+    #         sys.exit()
+        gf.check_events(ai_settings, screen, stats, sb, play_botton, ship, aliens, bullets)
+        #游戏状态来判断是否更新
+        if stats.game_active:
+            ship.update()
+            gf.update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets, explosions,dt)
+            gf.update_aliens(ai_settings, screen, stats, sb, ship, aliens, bullets)
+        gf.update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_botton,explosions)
+run_game()

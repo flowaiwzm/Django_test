@@ -1,0 +1,11 @@
+label的种类统计
+label样本的数量排名
+brand的种类统计
+不同label种类的平均rank排名
+price价格的平均数
+
+随机抽取10条数据 判断combination。。。是有多少次
+				判断combination。。。否有多少次
+
+
+
